@@ -1,14 +1,23 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 
 public class AddressBook {
     private ArrayList<Contact> contactList;
-    private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private File contactFile;
+    private BufferedReader keyboard;
+    private BufferedReader reader;
+    private PrintWriter writer;
 
-    public AddressBook () {
+    public AddressBook () throws IOException {
         contactList = new ArrayList<>();
+        contactFile = new File("X:\\Users\\valsecchi.christian\\Desktop\\contatti.txt");
+        if (!contactFile.exists())
+            contactFile.createNewFile();
+
+        keyboard = new BufferedReader(new InputStreamReader(System.in));
+        reader = new BufferedReader(new FileReader(contactFile));
+
+        writer =  new PrintWriter(new FileWriter(contactFile));
     }
 
     public ArrayList<Contact> getContactList() {
@@ -23,14 +32,15 @@ public class AddressBook {
 
     public void add() throws IOException {
         System.out.print("Insert contact name: ");
-        String n = br.readLine();
+        String n = keyboard.readLine();
         System.out.print("Insert contact surname: ");
-        String s = br.readLine();
+        String s = keyboard.readLine();
         System.out.print("Insert contact email: ");
-        String e = br.readLine();
+        String e = keyboard.readLine();
         System.out.print("Insert contact phone: ");
-        String p = br.readLine();
+        String p = keyboard.readLine();
         Contact contact = new Contact(n, s, e, p);
+        keyboard.close();
 
         if (!contactList.contains(contact))
             contactList.add(contact);
@@ -41,6 +51,18 @@ public class AddressBook {
         if (contact != null && !contactList.contains(contact))
             contactList.remove(contact);
 
+    }
+
+    public void save() {
+        for (Contact c : contactList) {
+            writer.print(contactList.indexOf(c) + ": " + c.toString());
+        }
+        writer.close();
+    }
+
+    public void print() throws IOException {
+        String line;
+        while ((line = reader.readLine()) != null) System.out.println(line);
     }
 
 }

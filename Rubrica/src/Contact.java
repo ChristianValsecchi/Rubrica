@@ -45,4 +45,7 @@ public class Contact {
         this.phone = phone;
     }
 
+    public String toString() {
+        return name+" "+surname+" "+phone+" "+email;
+    }
 }
