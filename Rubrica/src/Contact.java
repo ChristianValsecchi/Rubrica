@@ -46,6 +46,14 @@ public class Contact {
     }
 
     public String toString() {
+        String surname = this.surname;
+        String email = this.email;
+        if (this.surname == null) {
+            surname = "";
+        }
+        if (this.email == null) {
+            email = "";
+        }
         return name+" "+surname+" "+phone+" "+email;
     }
 }

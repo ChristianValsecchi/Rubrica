@@ -6,7 +6,6 @@ public class AddressBook {
     private File contactFile;
     private BufferedReader keyboard;
     private BufferedReader reader;
-    private PrintWriter writer;
 
     public AddressBook () throws IOException {
         contactList = new ArrayList<>();
@@ -16,8 +15,6 @@ public class AddressBook {
 
         keyboard = new BufferedReader(new InputStreamReader(System.in));
         reader = new BufferedReader(new FileReader(contactFile));
-
-        writer =  new PrintWriter(new FileWriter(contactFile));
     }
 
     public ArrayList<Contact> getContactList() {
@@ -27,6 +24,7 @@ public class AddressBook {
     public void add(Contact contact) {
         if (contact != null && !contactList.contains(contact))
             contactList.add(contact);
+        save();
 
     }
 
@@ -45,24 +43,29 @@ public class AddressBook {
         if (!contactList.contains(contact))
             contactList.add(contact);
 
+        save();
     }
 
     public void remove(Contact contact) {
         if (contact != null && !contactList.contains(contact))
             contactList.remove(contact);
-
+        save();
     }
 
-    public void save() {
-        for (Contact c : contactList) {
-            writer.print(contactList.indexOf(c) + ": " + c.toString());
+    private void save() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(contactFile))) {
+            for (Contact c : contactList)
+                writer.println(contactList.indexOf(c) + ": " + c.toString() + "\n");
+        } catch (IOException e) {
+            System.out.println("Impossibile salvare contatto: " + e.getMessage());
+
         }
-        writer.close();
     }
 
     public void print() throws IOException {
         String line;
         while ((line = reader.readLine()) != null) System.out.println(line);
+        reader.close();
     }
 
 }
