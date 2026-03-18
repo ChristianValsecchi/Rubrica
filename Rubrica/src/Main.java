@@ -9,11 +9,7 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        try {
-            ab.print();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        for (Contact c : ab.getContactList()) System.out.println(c.toString());
     }
 }
 

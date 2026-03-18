@@ -1,13 +1,7 @@
 public class Contact {
-    private String name, surname, email, phone;
+    private String name, email, phone;
 
-    public Contact (String name, String surname, String email, String phone) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.phone = phone;
-    }
-    public Contact (String name, String email, String phone) {
+    public Contact (String name, String phone, String email) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -24,12 +18,6 @@ public class Contact {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
 
     public String getEmail() {
         return email;
@@ -46,14 +34,10 @@ public class Contact {
     }
 
     public String toString() {
-        String surname = this.surname;
         String email = this.email;
-        if (this.surname == null) {
-            surname = "";
-        }
         if (this.email == null) {
             email = "";
         }
-        return name+" "+surname+" "+phone+" "+email;
+        return name+"|"+phone+"|"+email;
     }
 }
