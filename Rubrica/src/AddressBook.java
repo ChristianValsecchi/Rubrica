@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
-//X:\Users\valsecchi.christian\Desktop\
+
 public class AddressBook {
     private ArrayList<Contact> contactList;
     private final File contactFile = new File("Rubrica/contatti.txt");
