@@ -1,13 +1,11 @@
+import java.util.Objects;
+
 public class Contact {
     private String name, email, phone;
 
     public Contact (String name, String phone, String email) {
         this.name = name;
         this.email = email;
-        this.phone = phone;
-    }
-    public Contact (String name, String phone) {
-        this.name = name;
         this.phone = phone;
     }
 
@@ -31,6 +29,16 @@ public class Contact {
     }
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Contact other = (Contact) obj;
+        return Objects.equals(name, other.name) &&
+                Objects.equals(email, other.email) &&
+                Objects.equals(phone, other.phone);
     }
 
     public String toString() {

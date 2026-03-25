@@ -3,17 +3,11 @@ import java.util.ArrayList;
 //X:\Users\valsecchi.christian\Desktop\
 public class AddressBook {
     private ArrayList<Contact> contactList;
-    private File contactFile;
+    private final File contactFile = new File("Rubrica/contatti.txt");
 
     public AddressBook () throws IOException {
-        contactFile = new File("X:\\Users\\valsecchi.christian\\Desktop\\contatti.txt");
-        if (!contactFile.exists()) {
-            contactFile.createNewFile();
-            contactList = new ArrayList<>();
-        }
-
-        contactList = read();
-
+        if (!contactFile.exists()) contactFile.createNewFile();
+        else contactList = read();
     }
 
     public ArrayList<Contact> getContactList() {
@@ -21,13 +15,17 @@ public class AddressBook {
     }
 
     public void add(Contact contact) {
-        if (contact != null && !contactList.contains(contact))
-            contactList.add(contact);
-        write();
+        contactList = read();
 
+        if (contact != null && !contactList.contains(contact)) {
+            contactList.add(contact);
+            write(contact);
+        }
     }
 
     public void add() throws IOException {
+        contactList = read();
+
         BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Insert contact name: ");
         String n = keyboard.readLine();
@@ -38,25 +36,37 @@ public class AddressBook {
         Contact contact = new Contact(n, e, p);
         keyboard.close();
 
-        if (!contactList.contains(contact))
+        if (!contactList.contains(contact)) {
             contactList.add(contact);
+            write(contact);
+        }
 
-        write();
     }
 
     public void remove(Contact contact) {
+        contactList = read();
+
         if (contact != null && !contactList.contains(contact))
             contactList.remove(contact);
         write();
     }
 
-    private void write() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(contactFile))) {
-            for (Contact c : contactList)
-                writer.println(c.toString() + "\n");
+    private void write(Contact contact) {
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(contactFile, true))) {
+            writer.write(contact.toString()+"\n");
+            writer.flush();
         } catch (IOException e) {
             System.out.println("Impossibile salvare contatto: " + e.getMessage());
+        }
+    }
 
+    private void write() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(contactFile))) {
+            for (Contact c : contactList)
+                writer.write(c.toString()+"\n");
+        } catch (IOException e) {
+            System.out.println("Impossibile salvare contatto: " + e.getMessage());
         }
     }
     private ArrayList<Contact> read() {
@@ -73,7 +83,7 @@ public class AddressBook {
         return contactList;
     }
     private Contact parseContact(String line) {
-        String[] parts = line.split("\\|", -1); // Preserve empty fields
+        String[] parts = line.split("\\|", -1);
         if (parts.length < 2) return null;
 
         String name = parts[0].trim();
